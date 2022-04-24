@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Mobile Programming</string>
+    <string name="t_name">Nama</string>
+    <string name="dot2">:</string>
+    <string name="owner">Ikhsan Maulana</string>
+    <string name="matkul">Mobile Programming</string>
+    <string name="kls">Kelas</string>
+    <string name="nim">20416255201192</string>
+    <string name="bil1">Bilangan 1</string>
+    <string name="bil2">Bilangan 2</string>
+    <string name="t_kls">IF20E</string>
+    <string name="t_nim">NIM</string>
+    <string name="btn_add">Tambah</string>
 </resources>
