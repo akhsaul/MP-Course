@@ -1,14 +1,15 @@
 package ikhsan.maulana.tugas;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import ikhsan.maulana.tugas.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        var bind = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
     }
 }
