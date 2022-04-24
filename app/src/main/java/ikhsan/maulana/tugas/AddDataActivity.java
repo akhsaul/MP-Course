@@ -12,6 +12,7 @@ public class AddDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         var bind = ActivityAddDataBinding.inflate(getLayoutInflater());
+        bind.btnSave.setOnClickListener(v -> Util.maintenance(this));
         bind.btnBack.setOnClickListener(v -> finish());
         setContentView(bind.getRoot());
     }
