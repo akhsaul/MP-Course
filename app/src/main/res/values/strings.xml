@@ -11,4 +11,10 @@
     <string name="t_kls">IF20E</string>
     <string name="t_nim">NIM</string>
     <string name="btn_add">Tambah</string>
+    <string name="v_nim">20416255201192</string>
+    <string name="in_bil1">Input Bilangan 1</string>
+    <string name="in_bil2">Input Bilangan 2</string>
+    <string name="v_kls">IF20E</string>
+    <string name="btn_reset">Reset</string>
+    <string name="hsl">Hasil</string>
 </resources>
