@@ -1,8 +1,8 @@
 package ikhsan.maulana.tugas;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,16 +28,16 @@ public class CalculatorActivity extends AppCompatActivity {
     }
 
     private void add(View v) {
-        Integer bil1 = getVal(bind.inBil1.getText());
-        Integer bil2 = getVal(bind.inBil2.getText());
+        Integer bil1 = getVal(bind.inBil1);
+        Integer bil2 = getVal(bind.inBil2);
         if (bil1 != null && bil2 != null) {
             setVal(bil1 + bil2);
         }
     }
 
     @Nullable
-    private Integer getVal(@NonNull Editable txt) {
-        String val = txt.toString();
+    private Integer getVal(@NonNull EditText txt) {
+        String val = txt.getText().toString();
         if (!val.isEmpty() && !val.equals(" ")) {
             try {
                 return Integer.parseInt(val);
@@ -54,24 +54,24 @@ public class CalculatorActivity extends AppCompatActivity {
     }
 
     private void min(View v) {
-        Integer bil1 = getVal(bind.inBil1.getText());
-        Integer bil2 = getVal(bind.inBil2.getText());
+        Integer bil1 = getVal(bind.inBil1);
+        Integer bil2 = getVal(bind.inBil2);
         if (bil1 != null && bil2 != null) {
             setVal(bil1 - bil2);
         }
     }
 
     private void multi(View v) {
-        Integer bil1 = getVal(bind.inBil1.getText());
-        Integer bil2 = getVal(bind.inBil2.getText());
+        Integer bil1 = getVal(bind.inBil1);
+        Integer bil2 = getVal(bind.inBil2);
         if (bil1 != null && bil2 != null) {
             setVal(bil1 * bil2);
         }
     }
 
     private void div(View v) {
-        Integer bil1 = getVal(bind.inBil1.getText());
-        Integer bil2 = getVal(bind.inBil2.getText());
+        Integer bil1 = getVal(bind.inBil1);
+        Integer bil2 = getVal(bind.inBil2);
         if (bil1 != null && bil2 != null) {
             setVal(bil1 / bil2);
         }
