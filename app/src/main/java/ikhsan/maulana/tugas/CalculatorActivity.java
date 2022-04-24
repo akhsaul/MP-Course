@@ -23,6 +23,7 @@ public class CalculatorActivity extends AppCompatActivity {
         bind.btnMulti.setOnClickListener(this::multi);
         bind.btnDivide.setOnClickListener(this::div);
         bind.btnReset.setOnClickListener(this::reset);
+        bind.btnBack.setOnClickListener(v -> finish());
         setContentView(bind.getRoot());
     }
 
