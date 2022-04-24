@@ -13,10 +13,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         var bind = ActivityMainBinding.inflate(getLayoutInflater());
-        bind.btnCalc.setOnClickListener(v -> {
-            var destination = new Intent(this, CalculatorActivity.class);
-            startActivity(destination);
-        });
+        bind.btnCalc.setOnClickListener(v -> Util.move(this, CalculatorActivity.class));
+        bind.btnAddData.setOnClickListener(v -> Util.move(this, AddDataActivity.class));
+        bind.btnViewData.setOnClickListener(v -> Util.maintenance(this));
         setContentView(bind.getRoot());
     }
 }
