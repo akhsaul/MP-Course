@@ -58,9 +58,8 @@ public final class ViewDataActivity extends AppCompatActivity {
                     data.putString("no", selection);
                     switch (which) {
                         case 0:
-                            Util.move(this, DetailsDataActivity.class, data);
                         case 1:
-                            Util.move(this, UpdateDataActivity.class, data);
+                            Util.maintenance(this);
                             break;
                         case 2:
                             Util.deleteData(this, helper, selection);
