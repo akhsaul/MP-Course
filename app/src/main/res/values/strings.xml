@@ -33,4 +33,7 @@
     <string name="t_Calc">Kalkulator</string>
     <string name="t_Insert">Tambah Data</string>
     <string name="t_View">Lihat Data</string>
+    <string name="t_CLoc">Cek Lokasi</string>
+    <string name="t_Loc">Lokasi</string>
+    <string name="t_GLoc">Get Location</string>
 </resources>

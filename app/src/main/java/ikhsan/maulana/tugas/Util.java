@@ -2,6 +2,7 @@ package ikhsan.maulana.tugas;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 public final class Util {
     public static void move(@NonNull Context ctx, Class<?> cls, @Nullable Bundle bundle) {
@@ -17,6 +19,22 @@ public final class Util {
             dest.putExtras(bundle);
         }
         ctx.startActivity(dest);
+    }
+
+    public static boolean checkPermission(@NonNull Context ctx, @NonNull String... permissions) {
+        var granted = false;
+        for (String permission : permissions) {
+            granted = ActivityCompat.checkSelfPermission(ctx, permission) == PackageManager.PERMISSION_GRANTED;
+            Log.d(CheckLocationActivity.TAG, "isGranted = " + granted);
+            if (!granted) {
+                break;
+            }
+        }
+        return granted;
+    }
+
+    public static void move(@NonNull Context ctx, String action) {
+        ctx.startActivity(new Intent(action));
     }
 
     public static void move(@NonNull Context ctx, Class<?> cls) {
