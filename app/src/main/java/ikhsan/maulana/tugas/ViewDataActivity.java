@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -58,8 +59,9 @@ public final class ViewDataActivity extends AppCompatActivity {
                     data.putString("no", selection);
                     switch (which) {
                         case 0:
+                            Util.move(this, DetailsDataActivity.class, data);
                         case 1:
-                            Util.maintenance(this);
+                            Util.move(this, UpdateDataActivity.class, data);
                             break;
                         case 2:
                             Util.deleteData(this, helper, selection);
