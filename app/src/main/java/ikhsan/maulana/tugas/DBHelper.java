@@ -10,8 +10,11 @@ import androidx.annotation.Nullable;
 
 public final class DBHelper extends SQLiteOpenHelper {
     public static final String TAG = DBHelper.class.getSimpleName();
-    public static final String INSERT = "insert into biodata(no,nama,nohp,jk,alamat)values(null,";
-    private static final String DB_NAME = "mpt5.db";
+    public static final String UPDATE = "update biodata set nama='#1', nohp='#2', jk='#3', alamat='#4' where no='#0'";
+    public static final String DELETE = "delete from biodata where no = ";
+    public static final String SELECT = "select * from biodata";
+    public static final String INSERT = "insert into biodata(no,nama,nohp,jk,alamat)values(null,'#0','#1','#2','#3')";
+    private static final String DB_NAME = "mp_course.db";
     private static final String CREATE = "create table if not exists biodata(no integer primary key autoincrement, nama text null, nohp text null, jk text null, alamat text null)";
     private static final String DROP = "drop table if exists biodata";
 
