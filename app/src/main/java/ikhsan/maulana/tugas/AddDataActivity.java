@@ -7,6 +7,7 @@ import android.os.Bundle;
 import ikhsan.maulana.tugas.databinding.ActivityAddDataBinding;
 
 public class AddDataActivity extends AppCompatActivity {
+    public final static String TAG = AddDataActivity.class.getSimpleName();
     private final DBHelper helper;
 
     public AddDataActivity(){
@@ -17,7 +18,7 @@ public class AddDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         var bind = ActivityAddDataBinding.inflate(getLayoutInflater());
-        bind.btnSave.setOnClickListener(v -> Util.insertDB(this, helper,
+        bind.btnSave.setOnClickListener(v -> Util.insertData(this, helper,
                 bind.inName, bind.inNoHp, bind.inJK, bind.inAddress));
         bind.btnBack.setOnClickListener(v -> finish());
         setContentView(bind.getRoot());
