@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileProgramming">
         <activity
+            android:name=".DetailsDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateDataActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddDataActivity"
             android:exported="false" />
         <activity

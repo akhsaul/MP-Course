@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ikhsan.maulana.tugas.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

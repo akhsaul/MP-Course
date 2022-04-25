@@ -17,4 +17,20 @@
     <string name="v_kls">IF20E</string>
     <string name="btn_reset">Reset</string>
     <string name="hsl">Hasil</string>
+    <string name="t_back">Kembali</string>
+    <string name="t_save">Simpan</string>
+    <string name="h_address">Input Alamat</string>
+    <string name="t_address">Alamat</string>
+    <string name="h_Jk">L atau P</string>
+    <string name="t_Jk">Jenis Kelamin</string>
+    <string name="h_noHp">Input No HP</string>
+    <string name="t_NoHp">No HP</string>
+    <string name="h_Name">Input Nama</string>
+    <string name="t_Name">Nama</string>
+    <string name="h_No">Input Nomor</string>
+    <string name="t_No">Nomor</string>
+    <string name="t_Menu">CARD MENU</string>
+    <string name="t_Calc">Kalkulator</string>
+    <string name="t_Insert">Tambah Data</string>
+    <string name="t_View">Lihat Data</string>
 </resources>
