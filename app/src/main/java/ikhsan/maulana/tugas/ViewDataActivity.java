@@ -52,17 +52,17 @@ public final class ViewDataActivity extends AppCompatActivity {
         list.setSelected(true);
         list.setOnItemClickListener((parent, view, position, id) -> new AlertDialog.Builder(this).setTitle("Pilihan")
                 .setItems(dialogItem, (dialog, which) -> {
+                    var data = new Bundle();
+                    var selection = ids[position];
+                    Log.d(TAG, "no selection " + selection);
+                    data.putString("no", selection);
                     switch (which) {
                         case 0:
+                            Util.move(this, DetailsDataActivity.class, data);
                         case 1:
-                            Util.maintenance(this);
+                            Util.move(this, UpdateDataActivity.class, data);
                             break;
                         case 2:
-                            var data = new Bundle();
-                            var selection = ids[position];
-                            Log.d(TAG, "no selection " + selection);
-                            data.putString("no", selection);
-
                             Util.deleteData(this, helper, selection);
                             refreshList(list);
                             break;
