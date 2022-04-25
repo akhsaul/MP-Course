@@ -14,6 +14,7 @@ import ikhsan.maulana.tugas.databinding.ActivityViewDataBinding;
 public final class ViewDataActivity extends AppCompatActivity {
     public final static String TAG = ViewDataActivity.class.getSimpleName();
     private final DBHelper helper;
+    private ListView listItem;
     private String[] ids;
     private final static CharSequence[] dialogItem = {
             "Lihat Biodata",
@@ -32,7 +33,14 @@ public final class ViewDataActivity extends AppCompatActivity {
         bind.btnAdd.setOnClickListener(v -> Util.move(this, AddDataActivity.class));
         bind.btnBack.setOnClickListener(v -> finish());
         setContentView(bind.getRoot());
-        refreshList(bind.listItem);
+        listItem = bind.listItem;
+        refreshList(listItem);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        refreshList(listItem);
     }
 
     private void refreshList(ListView list) {
@@ -60,6 +68,7 @@ public final class ViewDataActivity extends AppCompatActivity {
                     switch (which) {
                         case 0:
                             Util.move(this, DetailsDataActivity.class, data);
+                            break;
                         case 1:
                             Util.move(this, UpdateDataActivity.class, data);
                             break;
