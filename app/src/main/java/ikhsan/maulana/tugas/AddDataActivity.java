@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import ikhsan.maulana.tugas.databinding.ActivityAddDataBinding;
 
-public class AddDataActivity extends AppCompatActivity {
+public final class AddDataActivity extends AppCompatActivity {
     public final static String TAG = AddDataActivity.class.getSimpleName();
     private final DBHelper helper;
 

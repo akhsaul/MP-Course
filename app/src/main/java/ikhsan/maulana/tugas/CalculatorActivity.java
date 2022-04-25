@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ikhsan.maulana.tugas.databinding.ActivityCalculatorBinding;
 
-public class CalculatorActivity extends AppCompatActivity {
+public final class CalculatorActivity extends AppCompatActivity {
     private ActivityCalculatorBinding bind;
     private static final char[] empty = new char[1];
 
