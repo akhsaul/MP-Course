@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddDataActivity">
+
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +22,12 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal">//
+
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="0dp"
@@ -33,25 +35,29 @@
                     android:layout_weight="1"
                     android:text="@string/t_No" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/inNumber"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:autofillHints=""
                     android:ems="10"
                     android:hint="@string/h_No"
                     android:inputType="number"
                     android:maxLength="20"
-                    android:maxLines="1"
-                    android:autofillHints="" />
+                    android:maxLines="1" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/textView1"
                     android:layout_width="0dp"
@@ -59,51 +65,59 @@
                     android:layout_weight="1"
                     android:text="@string/t_Name" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/inName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:autofillHints=""
                     android:ems="10"
                     android:hint="@string/h_Name"
                     android:inputType="textPersonName"
                     android:maxLength="200"
-                    android:maxLines="1"
-                    android:autofillHints="" />
+                    android:maxLines="1" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/t_NoHp" />
-            </LinearLayout>
+            </LinearLayout>//
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/inNoHp"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:autofillHints=""
                     android:ems="10"
                     android:hint="@string/h_noHp"
                     android:inputType="phone"
                     android:maxLength="20"
-                    android:maxLines="1"
-                    android:autofillHints="" />
+                    android:maxLines="1" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="0dp"
@@ -111,25 +125,29 @@
                     android:layout_weight="1"
                     android:text="@string/t_Jk" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/inJK"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:autofillHints=""
                     android:ems="10"
                     android:hint="@string/h_Jk"
                     android:inputType="textCapWords"
                     android:maxLength="1"
-                    android:maxLines="1"
-                    android:autofillHints="" />
+                    android:maxLines="1" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="0dp"
@@ -137,23 +155,41 @@
                     android:layout_weight="1"
                     android:text="@string/t_address" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal">//
+
                 <EditText
                     android:id="@+id/inAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ellipsize="none"
                     android:ems="10"
-                    android:hint="@string/h_address"
-                    android:inputType="text"
+                    android:hint="Input Alamat"
+                    android:inputType="text|textMultiLine"
                     android:maxLength="200"
-                    android:autofillHints="" />
+                    android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/btnGetLoc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:text="@string/t_GLoc" />
             </LinearLayout>
+
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"/>
+                android:layout_height="150dp" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutBot"
