@@ -25,7 +25,7 @@ public final class Util {
         var granted = false;
         for (String permission : permissions) {
             granted = ActivityCompat.checkSelfPermission(ctx, permission) == PackageManager.PERMISSION_GRANTED;
-            Log.d(CheckLocationActivity.TAG, "isGranted = " + granted);
+            Log.i(CheckLocationActivity.TAG, "Permission " + permission + " is granted = " + granted);
             if (!granted) {
                 break;
             }
