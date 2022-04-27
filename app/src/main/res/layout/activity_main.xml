@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="50dp"
-                android:text="CARD MENU"
+                android:text="@string/t_Menu"
                 android:textAlignment="center"
                 android:textColor="#2296F3"
                 android:textStyle="bold"
@@ -42,19 +42,25 @@
                 android:id="@+id/btnCalc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Kalkulator" />
+                android:text="@string/t_Calc" />
 
             <Button
                 android:id="@+id/btnAddData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Data" />
+                android:text="@string/t_Insert" />
 
             <Button
                 android:id="@+id/btnViewData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="View Data" />
+                android:text="@string/t_View" />
+
+            <Button
+                android:id="@+id/btnLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/t_CLoc" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

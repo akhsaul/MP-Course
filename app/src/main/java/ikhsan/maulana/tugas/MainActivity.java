@@ -15,6 +15,7 @@ public final class MainActivity extends AppCompatActivity {
         bind.btnCalc.setOnClickListener(v -> Util.move(this, CalculatorActivity.class));
         bind.btnAddData.setOnClickListener(v -> Util.move(this, AddDataActivity.class));
         bind.btnViewData.setOnClickListener(v -> Util.move(this, ViewDataActivity.class));
+        bind.btnLocation.setOnClickListener(v -> Util.move(this, CheckLocationActivity.class));
         setContentView(bind.getRoot());
     }
 }
