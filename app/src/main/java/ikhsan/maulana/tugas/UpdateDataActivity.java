@@ -1,6 +1,6 @@
 package ikhsan.maulana.tugas;
 
-import android.content.pm.PackageManager;
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -45,15 +45,13 @@ public final class UpdateDataActivity extends AppCompatActivity {
         setContentView(bind.getRoot());
     }
 
-
-    @SuppressWarnings("All")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
-            var grants = Arrays.stream(grantResults);
-            Log.i(TAG, "Permission " + Arrays.deepToString(permissions) + " is " + Arrays.toString(grantResults));
-            if (grants.anyMatch(x -> x == PackageManager.PERMISSION_DENIED)) {
+            Log.i(TAG, "Permission " + Arrays.deepToString(permissions)
+                    + " is " + Arrays.toString(grantResults));
+            if(Arrays.binarySearch(grantResults, PERMISSION_DENIED) > 0){
                 Util.turnOnGps(this);
             } else {
                 Util.getLocation(service, address);
