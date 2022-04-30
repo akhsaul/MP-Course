@@ -1,18 +1,32 @@
 package ikhsan.maulana.tugas;
 
+import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AlertDialog;
 
 public final class Util {
+    private static Geocoder coder = null;
+
+    public static synchronized Geocoder getCoder(@NonNull Context context) {
+        if (coder == null) {
+            coder = new Geocoder(context);
+        }
+        return coder;
+    }
+
     public static void move(@NonNull Context ctx, Class<?> cls, @Nullable Bundle bundle) {
         var dest = new Intent(ctx, cls);
         if (bundle != null) {
@@ -24,8 +38,8 @@ public final class Util {
     public static boolean checkPermission(@NonNull Context ctx, @NonNull String... permissions) {
         var granted = false;
         for (String permission : permissions) {
-            granted = ActivityCompat.checkSelfPermission(ctx, permission) == PackageManager.PERMISSION_GRANTED;
-            Log.i(CheckLocationActivity.TAG, "Permission " + permission + " is granted = " + granted);
+            granted = ctx.checkPermission(permission, Process.myPid(), Process.myUid()) == PackageManager.PERMISSION_GRANTED;
+            Log.i(ctx.getClass().getSimpleName(), "Permission " + permission + " is granted = " + granted);
             if (!granted) {
                 break;
             }
@@ -119,6 +133,39 @@ public final class Util {
             }
         } else {
             Util.show(ctx, "Input tidak boleh kosong");
+        }
+    }
+
+    public static void turnOnGps(@NonNull Context ctx) {
+        new AlertDialog.Builder(ctx)
+                .setMessage("Enable GPS").setCancelable(false)
+                .setPositiveButton("Yes", (d, w) -> Util.move(ctx,
+                        ACTION_LOCATION_SOURCE_SETTINGS
+                ))
+                .setNegativeButton("No", (dialog, which) -> {
+                    Util.show(ctx, "Unable to find location.");
+                    dialog.cancel();
+                })
+                .create().show();
+    }
+
+    public static void getLocation(@NonNull AppService service, @NonNull TextView txt) {
+        try {
+            service.setLocationListener(location -> {
+                Log.d(service.getTag(), "location from Service = " + location);
+                var build = new StringBuilder()
+                        .append("Your Location:")
+                        .append('\n')
+                        .append("Latitude: ")
+                        .append(location.getLatitude())
+                        .append('\n')
+                        .append("Longitude: ")
+                        .append(location.getLongitude());
+                txt.setText(build.toString());
+            }).requestLocation().start();
+        } catch (IllegalStateException e) {
+            Log.i(service.getTag(), "Message is " + e.getMessage());
+            Util.show(service.getActivity(), "Unable to find location.");
         }
     }
 }

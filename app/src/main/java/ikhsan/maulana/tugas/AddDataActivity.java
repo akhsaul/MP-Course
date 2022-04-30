@@ -1,14 +1,12 @@
 package ikhsan.maulana.tugas;
 
-import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
@@ -26,12 +24,12 @@ public final class AddDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         var bind = ActivityAddDataBinding.inflate(getLayoutInflater());
         helper = new DBHelper(this);
-        service = new AppService(this, this);
+        service = new AppService(this);
         address = bind.inAddress;
         bind.btnSave.setOnClickListener(v -> Util.insertData(this, helper,
                 bind.inName, bind.inNoHp, bind.inJK, bind.inAddress));
         bind.btnBack.setOnClickListener(v -> finish());
-        bind.btnGetLoc.setOnClickListener(v -> getLocation());
+        bind.btnGetLoc.setOnClickListener(v -> Util.getLocation(service, address));
         setContentView(bind.getRoot());
     }
 
@@ -43,44 +41,10 @@ public final class AddDataActivity extends AppCompatActivity {
             var grants = Arrays.stream(grantResults);
             Log.i(TAG, "Permission " + Arrays.deepToString(permissions) + " is " + Arrays.toString(grantResults));
             if (grants.anyMatch(x -> x == PackageManager.PERMISSION_DENIED)) {
-                turnOnGps();
+                Util.turnOnGps(this);
             } else {
-                getLocation();
+                Util.getLocation( service, address);
             }
-        }
-    }
-
-    private void turnOnGps() {
-        new AlertDialog.Builder(this)
-                .setMessage("Enable GPS").setCancelable(false)
-                .setPositiveButton("Yes", (d, w) -> Util.move(this,
-                        ACTION_LOCATION_SOURCE_SETTINGS
-                ))
-                .setNegativeButton("No", (dialog, which) -> {
-                    Util.show(this, "Unable to find location.");
-                    dialog.cancel();
-                })
-                .create().show();
-    }
-
-    private void getLocation() {
-        try {
-            service.getLocation(location -> {
-                Log.d(TAG, "location from Service = " + location);
-                if (location == null) {
-                    Util.show(this, "Unable to find location.");
-                } else {
-                    var build = new StringBuilder()
-                            .append(location.getLatitude())
-                            .append(" , ")
-                            .append(location.getLongitude());
-
-                    address.setText(build.toString());
-                }
-            });
-        } catch (IllegalStateException e) {
-            Log.i(TAG, "Message is " + e.getMessage());
-            Util.show(this, "Unable to find location.");
         }
     }
 }
