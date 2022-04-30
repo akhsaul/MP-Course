@@ -3,10 +3,10 @@ package ikhsan.maulana.tugas;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.INTERNET;
-import static android.location.LocationManager.GPS_PROVIDER;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.location.Criteria.ACCURACY_FINE;
 import static android.location.Criteria.ACCURACY_HIGH;
+import static android.location.LocationManager.GPS_PROVIDER;
 
 import android.app.Activity;
 import android.location.Address;
@@ -20,16 +20,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class AppService implements LocationListener {
     private final static String TAG = AppService.class.getSimpleName();
     private final static Handler handler = new Handler();
-    private final static Set<String> providers = new LinkedHashSet<>();
+    private final static CheckedSet<String> providers = new CheckedSet<>();
     private static boolean onProgress = false;
+    private AppServiceListener listener = (message, exception) -> {
+        throw new RuntimeException(message, exception);
+    };
     private final Activity act;
     @Nullable
     private LocationManager locationManager = null;
@@ -51,7 +52,7 @@ public final class AppService implements LocationListener {
     }
 
     private synchronized void locationPermission() {
-        Log.i(TAG, "LocationManager is " + locationManager);
+        Log.d(TAG, "LocationManager is " + locationManager);
         if (locationManager == null) {
             Log.i(TAG, "Request Location Permission");
             ActivityCompat.requestPermissions(act, new String[]{ACCESS_FINE_LOCATION}, 1);
@@ -61,9 +62,9 @@ public final class AppService implements LocationListener {
         }
     }
 
-    private void requestLocationUpdates(@NonNull LocationManager manager) {
+    private void requestLocation(@NonNull LocationManager manager) {
         var list = manager.getProviders(true);
-        if (!list.isEmpty()) {
+        if (!list.isEmpty() && !list.contains(null)) {
             var provider = GPS_PROVIDER;
             if (list.contains(provider)) {
                 providers.add(provider);
@@ -72,14 +73,12 @@ public final class AppService implements LocationListener {
                 criteria.setAccuracy(ACCURACY_FINE);
                 criteria.setSpeedAccuracy(ACCURACY_HIGH);
                 provider = manager.getBestProvider(criteria, true);
-                if (provider != null) {
-                    providers.add(provider);
-                }
+                providers.add(provider, true);
             } else {
                 providers.addAll(list);
             }
         } else {
-            throw new IllegalStateException("No Provider Enabled.");
+            listener.onError("No Provider Enabled.", new IllegalStateException());
         }
     }
 
@@ -91,6 +90,10 @@ public final class AppService implements LocationListener {
         return obj;
     }
 
+    public AppService setListener(@NonNull AppServiceListener listener) {
+        this.listener = listener;
+        return this;
+    }
 
     public AppService setLocationListener(@NonNull LocationListener listener) {
         locationListener = listener;
@@ -100,7 +103,7 @@ public final class AppService implements LocationListener {
     public AppService requestLocation() {
         locationPermission();
         if (locationManager != null) {
-            requestLocationUpdates(locationManager);
+            requestLocation(locationManager);
         } else {
             Log.w(TAG, "Location Manager is NULL. Can't request location!");
         }
@@ -109,14 +112,13 @@ public final class AppService implements LocationListener {
 
     @SuppressWarnings("MissingPermission")
     public void start() {
-
-        if (!providers.isEmpty()) {
+        if (!providers.isEmpty() && locationManager != null) {
             if (!onProgress) {
                 var queued = handler.post(() -> {
-                    for (String provider : providers) {
+                    for (var provider : providers) {
                         onProgress = true;
                         Log.i(TAG, "request location started using " + provider);
-                        notNull(locationManager).requestLocationUpdates(provider,
+                        locationManager.requestLocationUpdates(provider,
                                 1000 * 60 * 2, 10,
                                 this
                         );
@@ -140,18 +142,20 @@ public final class AppService implements LocationListener {
         notNull(locationListener).onLocationChanged(location);
         // get coder
         var coder = locationListener.getCoder(act);
-        List<Address> result = new LinkedList<>();
+        List<Address> result = new ArrayList<>();
         try {
             result = coder.getFromLocation(
                     location.getLatitude(), location.getLongitude(),
                     5
             );
-        } catch (Throwable t) {
-            Log.w(TAG, "Error when trying to decode location.", t);
+        } catch (Exception e) {
+            var msg = "Error when trying to decode location = " + location;
+            Log.w(TAG, msg, e);
+            listener.onError(msg, e);
+        } finally {
+            locationListener.onLocationDecoded(result.isEmpty() ? null : result.get(0));
+            locationListener.onLocationDecoded(result);
         }
-
-        locationListener.onLocationDecoded(result.isEmpty() ? null : result.get(0));
-        locationListener.onLocationDecoded(result);
         onProgress = false;
         Log.i(TAG, "request location finished");
     }
