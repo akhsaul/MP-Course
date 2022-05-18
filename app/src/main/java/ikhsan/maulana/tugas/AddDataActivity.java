@@ -38,7 +38,7 @@ public final class AddDataActivity extends AppCompatActivity {
         if (requestCode == 1) {
             Log.i(TAG, "Permission " + Arrays.deepToString(permissions)
                     + " is " + Arrays.toString(grantResults));
-            if(Arrays.binarySearch(grantResults, PERMISSION_DENIED) > 0){
+            if(Arrays.binarySearch(grantResults, PERMISSION_DENIED) > -1){
                 Util.turnOnGps(this);
             } else {
                 Util.getLocation(service, address);
