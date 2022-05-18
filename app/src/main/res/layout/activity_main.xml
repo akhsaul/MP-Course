@@ -61,6 +61,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/t_CLoc" />
+
+            <Button
+                android:id="@+id/btnProximity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cek Proximity" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
