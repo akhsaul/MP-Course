@@ -4,11 +4,16 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.INTERNET;
 import static android.content.Context.LOCATION_SERVICE;
+import static android.content.Context.SENSOR_SERVICE;
+import static android.hardware.Sensor.TYPE_ALL;
+import static android.hardware.Sensor.TYPE_PROXIMITY;
 import static android.location.Criteria.ACCURACY_FINE;
 import static android.location.Criteria.ACCURACY_HIGH;
 import static android.location.LocationManager.GPS_PROVIDER;
 
 import android.app.Activity;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Location;
@@ -20,22 +25,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class AppService implements LocationListener {
     private final static String TAG = AppService.class.getSimpleName();
     private final static Handler handler = new Handler();
     private final static CheckedSet<String> providers = new CheckedSet<>();
+    private final static CheckedSet<Sensor> sensors = new CheckedSet<>();
     private static boolean onProgress = false;
-    private AppServiceListener listener = (message, exception) -> {
-        throw new RuntimeException(message, exception);
-    };
     private final Activity act;
     @Nullable
     private LocationManager locationManager = null;
+    private AppServiceListener listener = (message, exception) -> {
+        throw new RuntimeException(message, exception);
+    };
+    @Nullable
+    private SensorManager sensorManager = null;
     @Nullable
     private LocationListener locationListener = null;
+    @Nullable
+    private SensorListener sensorListener = null;
 
     public AppService(@NonNull Activity activity) {
         act = activity;
@@ -62,23 +74,9 @@ public final class AppService implements LocationListener {
         }
     }
 
-    private void requestLocation(@NonNull LocationManager manager) {
-        var list = manager.getProviders(true);
-        if (!list.isEmpty() && !list.contains(null)) {
-            var provider = GPS_PROVIDER;
-            if (list.contains(provider)) {
-                providers.add(provider);
-
-                var criteria = new Criteria();
-                criteria.setAccuracy(ACCURACY_FINE);
-                criteria.setSpeedAccuracy(ACCURACY_HIGH);
-                provider = manager.getBestProvider(criteria, true);
-                providers.add(provider, true);
-            } else {
-                providers.addAll(list);
-            }
-        } else {
-            listener.onError("No Provider Enabled.", new IllegalStateException());
+    private synchronized void sensorPermission() {
+        if (sensorManager == null) {
+            sensorManager = (SensorManager) act.getSystemService(SENSOR_SERVICE);
         }
     }
 
@@ -98,6 +96,59 @@ public final class AppService implements LocationListener {
     public AppService setLocationListener(@NonNull LocationListener listener) {
         locationListener = listener;
         return this;
+    }
+
+    public AppService setSensorListener(@NonNull SensorListener listener) {
+        sensorListener = listener;
+        return this;
+    }
+
+    private AppService requestSensor(int type) {
+        sensorPermission();
+        if (sensorManager != null) {
+            try {
+                sensors.addAll(type == TYPE_ALL
+                        ? sensorManager.getSensorList(TYPE_ALL)
+                        : Collections.singletonList(sensorManager.getDefaultSensor(type))
+                );
+            } catch (NullPointerException npe) {
+                listener.onError("Sensor " + type + " is NULL." +
+                                " Check permission or does not supported",
+                        npe
+                );
+            }
+        } else {
+            Log.w(TAG, "Sensor Manager is NULL. Can't request sensor!");
+        }
+        return this;
+    }
+
+    public AppService requestProximity() {
+        return requestSensor(TYPE_PROXIMITY);
+    }
+
+    public AppService requestAllSensor() {
+        return requestSensor(TYPE_ALL);
+    }
+
+    private void requestLocation(@NonNull LocationManager manager) {
+        var list = manager.getProviders(true);
+        if (!list.isEmpty() && !list.contains(null)) {
+            var provider = GPS_PROVIDER;
+            if (list.contains(provider)) {
+                providers.add(provider);
+
+                var criteria = new Criteria();
+                criteria.setAccuracy(ACCURACY_FINE);
+                criteria.setSpeedAccuracy(ACCURACY_HIGH);
+                provider = manager.getBestProvider(criteria, true);
+                providers.add(provider, true);
+            } else {
+                providers.addAll(list);
+            }
+        } else {
+            listener.onError("No Provider Enabled.", new IllegalStateException());
+        }
     }
 
     public AppService requestLocation() {
@@ -134,6 +185,20 @@ public final class AppService implements LocationListener {
                 Log.i(TAG, "request location onProgress. NEW REQUEST WILL BE IGNORED!");
             }
         }
+
+        if (!sensors.isEmpty() && sensorManager != null) {
+            var queued = handler.post(() -> {
+                for (Sensor sensor : sensors) {
+                    sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+                }
+            });
+
+            if (queued) {
+                Log.i(TAG, "request sensor in queued");
+            } else {
+                Log.i(TAG, "request sensor NOT in queued");
+            }
+        }
     }
 
     @Override
@@ -148,10 +213,10 @@ public final class AppService implements LocationListener {
                     location.getLatitude(), location.getLongitude(),
                     5
             );
-        } catch (Exception e) {
+        } catch (IOException io) {
             var msg = "Error when trying to decode location = " + location;
-            Log.w(TAG, msg, e);
-            listener.onError(msg, e);
+            Log.w(TAG, msg, new DecoderException(io.getMessage(), io));
+            listener.onError(msg, new DecoderException(io.getMessage(), io));
         } finally {
             locationListener.onLocationDecoded(result.isEmpty() ? null : result.get(0));
             locationListener.onLocationDecoded(result);

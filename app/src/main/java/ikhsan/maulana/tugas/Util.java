@@ -150,22 +150,21 @@ public final class Util {
     }
 
     public static void getLocation(@NonNull AppService service, @NonNull TextView txt) {
-        try {
-            service.setLocationListener(location -> {
-                Log.d(service.getTag(), "location from Service = " + location);
-                var build = new StringBuilder()
-                        .append("Your Location:")
-                        .append('\n')
-                        .append("Latitude: ")
-                        .append(location.getLatitude())
-                        .append('\n')
-                        .append("Longitude: ")
-                        .append(location.getLongitude());
-                txt.setText(build.toString());
-            }).requestLocation().start();
-        } catch (IllegalStateException e) {
-            Log.i(service.getTag(), "Message is " + e.getMessage());
-            Util.show(service.getActivity(), "Unable to find location.");
-        }
+        service.setListener((m, e) -> {
+            if (!(e instanceof DecoderException)) {
+                Util.show(service.getActivity(), "Unable to find location.");
+            }
+        }).setLocationListener(location -> {
+            Log.d(service.getTag(), "location from Service = " + location);
+            var build = new StringBuilder()
+                    .append("Your Location:")
+                    .append('\n')
+                    .append("Latitude: ")
+                    .append(location.getLatitude())
+                    .append('\n')
+                    .append("Longitude: ")
+                    .append(location.getLongitude());
+            txt.setText(build.toString());
+        }).requestLocation().start();
     }
 }
