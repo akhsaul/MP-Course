@@ -98,10 +98,10 @@ public final class Util {
         }
     }
 
-    private static boolean validate(@NonNull EditText... texts) {
+    public static boolean validate(@NonNull EditText... texts) {
         var result = false;
         for (EditText text : texts) {
-            var str = text.getText().toString();
+            var str = toStr(text);
             if (!str.isEmpty() && !str.equals(" ")) {
                 result = true;
                 break;
@@ -110,9 +110,14 @@ public final class Util {
         return result;
     }
 
+    @NonNull
+    public static String toStr(@NonNull EditText editText){
+        return editText.getText().toString();
+    }
+
     private static void replace(@NonNull StringBuilder builder, @NonNull EditText... texts) {
         for (int i = 0; i < texts.length; i++) {
-            var str = texts[i].getText().toString();
+            var str = toStr(texts[i]);
             var index = builder.indexOf("#" + i);
             builder.insert(index + 2, str).deleteCharAt(index).deleteCharAt(index);
         }
