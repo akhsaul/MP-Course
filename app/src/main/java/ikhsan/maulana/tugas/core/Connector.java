@@ -7,12 +7,10 @@ import androidx.annotation.NonNull;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
-import com.androidnetworking.common.Priority;
 
 import org.json.JSONObject;
 
 import ikhsan.maulana.tugas.AddActivity;
-import ikhsan.maulana.tugas.UpdateDataActivity;
 
 public class Connector {
     private static Connector singleton = null;
