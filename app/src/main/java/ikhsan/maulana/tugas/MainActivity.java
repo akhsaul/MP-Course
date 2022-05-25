@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import ikhsan.maulana.tugas.core.Connector;
 import ikhsan.maulana.tugas.databinding.ActivityMainBinding;
 
 public final class MainActivity extends AppCompatActivity {
@@ -17,6 +18,8 @@ public final class MainActivity extends AppCompatActivity {
         bind.btnViewData.setOnClickListener(v -> Util.move(this, ViewDataActivity.class));
         bind.btnLocation.setOnClickListener(v -> Util.move(this, CheckLocationActivity.class));
         bind.btnProximity.setOnClickListener(v -> Util.move(this, ProximityActivity.class));
+        bind.btnAdd.setOnClickListener(v -> Util.move(this, AddActivity.class));
         setContentView(bind.getRoot());
+        Connector.getInstance().initialize(this);
     }
 }
