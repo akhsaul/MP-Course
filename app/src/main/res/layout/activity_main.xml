@@ -22,10 +22,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
@@ -73,6 +69,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Add Data (Mysql)" />
+
+            <Button
+                android:id="@+id/btnRead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Read Data (Mysql)" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

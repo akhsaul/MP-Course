@@ -2,15 +2,24 @@ package ikhsan.maulana.tugas.core;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.os.HandlerCompat;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import ikhsan.maulana.tugas.AddActivity;
+import ikhsan.maulana.tugas.ReadActivity;
 
 public class Connector {
     private static Connector singleton = null;
@@ -19,9 +28,22 @@ public class Connector {
     private static final String PATH = "/api/mahasiswa/";
     private static final String AGENT = "ikhsan.maulana.tugas";
     private static String BASE = "";
+    private static final String TAG = Connector.class.getSimpleName();
+    private final ExecutorService executor;
+    private final Handler mainThreadHandler;
 
-    Connector(){
+    Connector() {
         buildURL();
+        mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+        executor = Executors.newFixedThreadPool(1, r -> new Thread() {
+
+            @Override
+            public void run() {
+                setName("Background");
+                setPriority(Thread.MAX_PRIORITY);
+                r.run();
+            }
+        });
     }
 
     public static Connector getInstance() {
@@ -32,7 +54,10 @@ public class Connector {
     }
 
     public void initialize(@NonNull Context ctx) {
-        new Handler().post(() -> AndroidNetworking.initialize(ctx));
+        run(() -> {
+            AndroidNetworking.initialize(ctx);
+            AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BASIC);
+        });
     }
 
     private void buildURL() {
@@ -49,8 +74,28 @@ public class Connector {
     public ANRequest apiAdd(JSONObject json) {
         return AndroidNetworking.post(BASE + "add")
                 .setUserAgent(AGENT)
+                .setPriority(Priority.HIGH)
                 .setTag(AddActivity.class)
                 .addJSONObjectBody(json)
                 .build();
+    }
+
+    public ANRequest apiRead() {
+        return AndroidNetworking.get(BASE)
+                .setUserAgent(AGENT)
+                .setTag(ReadActivity.class)
+                .setPriority(Priority.HIGH)
+                .build();
+    }
+
+    public void run(Runnable r) {
+        executor.execute(r);
+    }
+
+    public void runOnMain(Runnable r) {
+        mainThreadHandler.post(r);
+    }
+    public void runOnMain(Runnable r, long delay) {
+        mainThreadHandler.postDelayed(r, delay);
     }
 }
