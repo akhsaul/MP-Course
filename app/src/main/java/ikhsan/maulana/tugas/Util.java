@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import org.jetbrains.annotations.Contract;
+
 public final class Util {
     private static Geocoder coder = null;
 
@@ -113,6 +115,15 @@ public final class Util {
     @NonNull
     public static String toStr(@NonNull EditText editText){
         return editText.getText().toString();
+    }
+
+    @NonNull
+    @Contract("null -> fail; !null -> param1")
+    public static <T> T notNull(T obj){
+        if (obj == null){
+            throw new NullPointerException("Require NON-NULL");
+        }
+        return obj;
     }
 
     private static void replace(@NonNull StringBuilder builder, @NonNull EditText... texts) {
