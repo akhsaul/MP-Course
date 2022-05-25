@@ -29,8 +29,8 @@ public class AddActivity extends AppCompatActivity {
         var bind = ActivityAddBinding.inflate(getLayoutInflater());
         setContentView(bind.getRoot());
         current = getIntent();
+        var progressDialog = new ProgressDialog(this);
         bind.submit.setOnClickListener(v -> {
-            var progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Menambahkan Data...");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -101,7 +101,7 @@ public class AddActivity extends AppCompatActivity {
                                             setResult(RESULT_CANCELED, current);
                                         }
                                         AddActivity.this.finish();
-                                    }).show();
+                                    }).setMessage(message[0]).show();
                                 }
                             }
 
