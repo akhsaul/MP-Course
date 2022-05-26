@@ -40,27 +40,21 @@ public class ReadActivity extends AppCompatActivity {
         refresh();
     }
 
-    private void refresh() {
+    void refresh() {
         progressDialog.setMessage("Mengambil Data.....");
         progressDialog.setCancelable(false);
         progressDialog.show();
         getData();
     }
 
-    private void init() {
-        arrayData = new ArrayList<>();
-    }
-
     private void getData() {
-        init();
+        arrayData = new ArrayList<>();
         Connector.getInstance().apiRead().getAsJSONObject(new JSONObjectRequestListener() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 Connector.getInstance().run(() -> {
-                    Log.d(TAG, "LINE 61 " + Thread.currentThread());
                     try {
                         var status = jsonObject.getBoolean("status");
-                        Log.d(TAG, "status = " + status);
                         if (status) {
                             var array = jsonObject.getJSONArray("data");
                             for (int i = 0; i < array.length(); i++) {
@@ -72,7 +66,6 @@ public class ReadActivity extends AppCompatActivity {
                                 arrayObj.add(obj.getString("hobi"));
                                 arrayData.add(arrayObj);
                             }
-                            Log.d(TAG, "ArrayData DONE");
                         } else {
                             Util.show(ReadActivity.this, "Gagal mengambil Data");
                         }
@@ -80,7 +73,6 @@ public class ReadActivity extends AppCompatActivity {
                         Log.e(TAG, "Error. " + e.getMessage(), e.getCause());
                         Util.show(ReadActivity.this, "Gagal mengambil Data");
                     } finally {
-                        Log.d(TAG, "HERE, FINALLY " + Thread.currentThread());
                         var adapter = new RVAdapter(ReadActivity.this, arrayData);
                         Connector.getInstance().runOnMain(()-> bind.rvMain.setAdapter(adapter));
                         Connector.getInstance().runOnMain(()-> progressDialog.dismiss(), arrayData.size() * 6L);
