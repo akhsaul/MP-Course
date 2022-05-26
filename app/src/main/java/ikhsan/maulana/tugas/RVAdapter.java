@@ -1,28 +1,39 @@
 package ikhsan.maulana.tugas;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import ikhsan.maulana.tugas.core.Connector;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
     private static final String TAG = RVAdapter.class.getSimpleName();
     private final Context context;
-    //ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     private final ArrayList<ArrayList<String>> arrayData;
 
     public RVAdapter(@NonNull Context context, ArrayList<ArrayList<String>> data) {
         this.context = context;
         this.arrayData = data;
-        Log.d(TAG, "LINE 26 "+Thread.currentThread());
         setHasStableIds(true);
     }
 
@@ -67,7 +78,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
             nama = v.findViewById(R.id.tv_name);
             alamat = v.findViewById(R.id.tv_address);
             hobi = v.findViewById(R.id.tv_hobby);
-            //progressDialog = new ProgressDialog(context);
+            progressDialog = new ProgressDialog(context);
         }
     }
 }

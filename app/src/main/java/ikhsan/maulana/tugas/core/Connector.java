@@ -71,6 +71,7 @@ public class Connector {
         BASE = BASE + PATH;
     }
 
+    @NonNull
     public ANRequest apiAdd(JSONObject json) {
         return AndroidNetworking.post(BASE + "add")
                 .setUserAgent(AGENT)
@@ -80,6 +81,7 @@ public class Connector {
                 .build();
     }
 
+    @NonNull
     public ANRequest apiRead() {
         return AndroidNetworking.get(BASE)
                 .setUserAgent(AGENT)

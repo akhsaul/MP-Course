@@ -40,7 +40,7 @@ public class ReadActivity extends AppCompatActivity {
         refresh();
     }
 
-    private void refresh() {
+    void refresh() {
         progressDialog.setMessage("Mengambil Data.....");
         progressDialog.setCancelable(false);
         progressDialog.show();
