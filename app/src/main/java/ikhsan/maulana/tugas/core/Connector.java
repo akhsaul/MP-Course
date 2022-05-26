@@ -3,7 +3,6 @@ package ikhsan.maulana.tugas.core;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
@@ -28,7 +27,6 @@ public class Connector {
     private static final String PATH = "/api/mahasiswa/";
     private static final String AGENT = "ikhsan.maulana.tugas";
     private static String BASE = "";
-    private static final String TAG = Connector.class.getSimpleName();
     private final ExecutorService executor;
     private final Handler mainThreadHandler;
 

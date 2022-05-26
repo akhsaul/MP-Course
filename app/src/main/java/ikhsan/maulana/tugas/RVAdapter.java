@@ -1,34 +1,19 @@
 package ikhsan.maulana.tugas;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-import ikhsan.maulana.tugas.core.Connector;
-
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
-    private static final String TAG = RVAdapter.class.getSimpleName();
     private final Context context;
-    private ProgressDialog progressDialog;
     private final ArrayList<ArrayList<String>> arrayData;
 
     public RVAdapter(@NonNull Context context, ArrayList<ArrayList<String>> data) {
@@ -40,7 +25,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RVAdapter.Holder(LayoutInflater
+        return new Holder(LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.template_rv, parent, false)
         );
@@ -53,9 +38,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
         holder.nama.setText(data.get(1));
         holder.alamat.setText(data.get(2));
         holder.hobi.setText(data.get(3));
-        holder.cvMain.setOnClickListener(v -> {
-            Util.maintenance(context);
-        });
+        holder.cvMain.setOnClickListener(v -> Util.maintenance(context));
         holder.cvMain.setOnLongClickListener(v -> {
             Util.maintenance(context);
             return false;
@@ -67,7 +50,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
         return arrayData.size();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    static class Holder extends RecyclerView.ViewHolder {
         public TextView nim, nama, alamat, hobi;
         public CardView cvMain;
 
@@ -78,7 +61,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
             nama = v.findViewById(R.id.tv_name);
             alamat = v.findViewById(R.id.tv_address);
             hobi = v.findViewById(R.id.tv_hobby);
-            progressDialog = new ProgressDialog(context);
         }
     }
 }
