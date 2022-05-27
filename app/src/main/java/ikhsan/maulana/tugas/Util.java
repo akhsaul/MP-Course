@@ -17,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import org.jetbrains.annotations.Contract;
-
 public final class Util {
     private static Geocoder coder = null;
 
@@ -74,7 +72,7 @@ public final class Util {
         return total;
     }
 
-    public static void updateData(Context ctx, @NonNull DBHelper helper, @NonNull EditText... texts) {
+    public static void updateData(@NonNull Context ctx, @NonNull DBHelper helper, @NonNull EditText... texts) {
         if (validate(texts)) {
             var builder = new StringBuilder((DBHelper.UPDATE.length() - 8) + count(texts));
             builder.append(DBHelper.UPDATE);
@@ -92,7 +90,7 @@ public final class Util {
         }
     }
 
-    public static void deleteData(Context ctx, @NonNull DBHelper helper, String no) {
+    public static void deleteData(@NonNull Context ctx, @NonNull DBHelper helper, String no) {
         try (var db = helper.getWritableDatabase()) {
             db.execSQL(DBHelper.DELETE +
                     (char) 39 + no + (char) 39);
@@ -118,7 +116,6 @@ public final class Util {
     }
 
     @NonNull
-    @Contract("null -> fail; !null -> param1")
     public static <T> T notNull(T obj){
         if (obj == null){
             throw new NullPointerException("Require NON-NULL");
@@ -134,7 +131,7 @@ public final class Util {
         }
     }
 
-    public static void insertData(Context ctx, @NonNull DBHelper helper, @NonNull EditText... texts) {
+    public static void insertData(@NonNull Context ctx, @NonNull DBHelper helper, @NonNull EditText... texts) {
         if (validate(texts)) {
             var builder = new StringBuilder((DBHelper.INSERT.length() - 6) + count(texts));
             builder.append(DBHelper.INSERT);
