@@ -54,7 +54,7 @@ public class AddActivity extends AppCompatActivity {
     private void sendData(@NonNull ProgressDialog progressDialog, @NonNull String... values) {
         final boolean[] status = {false};
         final String[] message = {"Data gagal disimpan!"};
-        var dialog = new AlertDialog.Builder(AddActivity.this)
+        var dialog = new AlertDialog.Builder(this)
                 .setCancelable(false)
                 .setMessage(message[0]);
 
