@@ -44,6 +44,7 @@ public class Connector {
         });
     }
 
+    @NonNull
     public static Connector getInstance() {
         if (singleton == null) {
             singleton = new Connector();
@@ -70,7 +71,7 @@ public class Connector {
     }
 
     @NonNull
-    public ANRequest apiAdd(JSONObject json) {
+    public ANRequest apiAdd(@Nullable JSONObject json) {
         return AndroidNetworking.post(BASE + "add")
                 .setUserAgent(AGENT)
                 .setPriority(Priority.HIGH)
