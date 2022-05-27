@@ -101,11 +101,11 @@ public final class Util {
     }
 
     public static boolean validate(@NonNull EditText... texts) {
-        var result = false;
+        var result = true;
         for (EditText text : texts) {
             var str = toStr(text);
-            if (!str.isEmpty() && !str.equals(" ")) {
-                result = true;
+            if (str.isEmpty() || str.equals(" ")) {
+                result = false;
                 break;
             }
         }
@@ -114,7 +114,7 @@ public final class Util {
 
     @NonNull
     public static String toStr(@NonNull EditText editText){
-        return editText.getText().toString();
+        return editText.getText().toString().trim();
     }
 
     @NonNull

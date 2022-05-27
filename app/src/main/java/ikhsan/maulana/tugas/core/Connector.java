@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
@@ -24,6 +25,7 @@ public class Connector {
         buildURL();
     }
 
+    @NonNull
     public static Connector getInstance() {
         if (singleton == null) {
             singleton = new Connector();
@@ -46,7 +48,8 @@ public class Connector {
         BASE = BASE + PATH;
     }
 
-    public ANRequest apiAdd(JSONObject json) {
+    @NonNull
+    public ANRequest apiAdd(@Nullable JSONObject json) {
         return AndroidNetworking.post(BASE + "add")
                 .setUserAgent(AGENT)
                 .setTag(AddActivity.class)
