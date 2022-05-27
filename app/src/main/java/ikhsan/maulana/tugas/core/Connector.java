@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 
 import com.androidnetworking.AndroidNetworking;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executors;
 
 import ikhsan.maulana.tugas.AddActivity;
 import ikhsan.maulana.tugas.ReadActivity;
+import ikhsan.maulana.tugas.UpdateActivity;
 
 public class Connector {
     private static Connector singleton = null;
@@ -85,6 +87,16 @@ public class Connector {
                 .setUserAgent(AGENT)
                 .setTag(ReadActivity.class)
                 .setPriority(Priority.HIGH)
+                .build();
+    }
+
+    @NonNull
+    public ANRequest apiUpdate(@NonNull String nim, @Nullable JSONObject json) {
+        return AndroidNetworking.put(BASE + "update/" + nim)
+                .setPriority(Priority.HIGH)
+                .setUserAgent(AGENT)
+                .setTag(UpdateActivity.class)
+                .addJSONObjectBody(json)
                 .build();
     }
 
