@@ -16,7 +16,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
     private final Context context;
     private final ArrayList<ArrayList<String>> arrayData;
 
-    public RVAdapter(@NonNull Context context, ArrayList<ArrayList<String>> data) {
+    public RVAdapter(@NonNull Context context, @NonNull ArrayList<ArrayList<String>> data) {
         this.context = context;
         this.arrayData = data;
         setHasStableIds(true);
