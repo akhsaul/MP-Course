@@ -67,6 +67,7 @@ public class AddActivity extends AppCompatActivity {
                     .put("hobi", values[3]);
         } catch (JSONException t) {
             Log.e(TAG, "Error happened.", t);
+            progressDialog.dismiss();
             notifyError(dialog);
         }
 
