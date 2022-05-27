@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import ikhsan.maulana.tugas.core.Connector;
+
 public final class Util {
     private static Geocoder coder = null;
 
@@ -60,7 +62,9 @@ public final class Util {
     }
 
     public static void show(@NonNull Context ctx, String message) {
-        Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
+        Connector.getInstance().runOnMain(
+                () -> Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show()
+        );
     }
 
     private static int count(@NonNull EditText... texts) {
@@ -111,13 +115,13 @@ public final class Util {
     }
 
     @NonNull
-    public static String toStr(@NonNull EditText editText){
+    public static String toStr(@NonNull EditText editText) {
         return editText.getText().toString().trim();
     }
 
     @NonNull
-    public static <T> T notNull(T obj){
-        if (obj == null){
+    public static <T> T notNull(T obj) {
+        if (obj == null) {
             throw new NullPointerException("Require NON-NULL");
         }
         return obj;
