@@ -90,14 +90,14 @@ public class Connector {
                 .build();
     }
 
-    public void run(Runnable r) {
+    public void run(@NonNull Runnable r) {
         executor.execute(r);
     }
 
-    public void runOnMain(Runnable r) {
+    public void runOnMain(@NonNull Runnable r) {
         mainThreadHandler.post(r);
     }
-    public void runOnMain(Runnable r, long delay) {
+    public void runOnMain(@NonNull Runnable r, long delay) {
         mainThreadHandler.postDelayed(r, delay);
     }
 }
