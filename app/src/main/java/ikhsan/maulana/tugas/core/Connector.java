@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 
 import com.androidnetworking.AndroidNetworking;
@@ -44,6 +45,7 @@ public class Connector {
         });
     }
 
+    @NonNull
     public static Connector getInstance() {
         if (singleton == null) {
             singleton = new Connector();
@@ -70,7 +72,7 @@ public class Connector {
     }
 
     @NonNull
-    public ANRequest apiAdd(JSONObject json) {
+    public ANRequest apiAdd(@Nullable JSONObject json) {
         return AndroidNetworking.post(BASE + "add")
                 .setUserAgent(AGENT)
                 .setPriority(Priority.HIGH)
@@ -88,14 +90,14 @@ public class Connector {
                 .build();
     }
 
-    public void run(Runnable r) {
+    public void run(@NonNull Runnable r) {
         executor.execute(r);
     }
 
-    public void runOnMain(Runnable r) {
+    public void runOnMain(@NonNull Runnable r) {
         mainThreadHandler.post(r);
     }
-    public void runOnMain(Runnable r, long delay) {
+    public void runOnMain(@NonNull Runnable r, long delay) {
         mainThreadHandler.postDelayed(r, delay);
     }
 }
