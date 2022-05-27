@@ -13,6 +13,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ikhsan.maulana.tugas.core.Connector;
 import ikhsan.maulana.tugas.databinding.ActivityReadBinding;
@@ -57,6 +58,8 @@ public class ReadActivity extends AppCompatActivity {
                         var status = jsonObject.getBoolean("status");
                         if (status) {
                             var array = jsonObject.getJSONArray("data");
+                            var tmpArrayData = new ArrayList<ArrayList<String>>();
+                            long[] arrayNim = new long[array.length()];
                             for (int i = 0; i < array.length(); i++) {
                                 var obj = array.getJSONObject(i);
                                 var arrayObj = new ArrayList<String>();
@@ -64,18 +67,30 @@ public class ReadActivity extends AppCompatActivity {
                                 arrayObj.add(obj.getString("nama"));
                                 arrayObj.add(obj.getString("alamat"));
                                 arrayObj.add(obj.getString("hobi"));
-                                arrayData.add(arrayObj);
+                                tmpArrayData.add(arrayObj);
+                                arrayNim[i] = obj.getLong("nim");
                             }
+
+                            Arrays.sort(arrayNim);
+
+                            for (long nim : arrayNim) {
+                                for (ArrayList<String> data : tmpArrayData) {
+                                    if (nim == Long.parseLong(data.get(0))) {
+                                        arrayData.add(data);
+                                    }
+                                }
+                            }
+                            tmpArrayData.clear();
                         } else {
-                            Util.show(ReadActivity.this, "Gagal mengambil Data");
+                            Connector.getInstance().runOnMain(() -> Util.show(ReadActivity.this, "Gagal mengambil Data"));
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error. " + e.getMessage(), e.getCause());
-                        Util.show(ReadActivity.this, "Gagal mengambil Data");
+                        Connector.getInstance().runOnMain(() -> Util.show(ReadActivity.this, "Gagal mengambil Data"));
                     } finally {
                         var adapter = new RVAdapter(ReadActivity.this, arrayData);
-                        Connector.getInstance().runOnMain(()-> bind.rvMain.setAdapter(adapter));
-                        Connector.getInstance().runOnMain(()-> progressDialog.dismiss(), arrayData.size() * 6L);
+                        Connector.getInstance().runOnMain(() -> bind.rvMain.setAdapter(adapter));
+                        Connector.getInstance().runOnMain(() -> progressDialog.dismiss(), arrayData.size() * 6L);
                     }
                 });
             }
