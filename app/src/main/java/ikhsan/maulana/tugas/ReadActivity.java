@@ -1,9 +1,14 @@
 package ikhsan.maulana.tugas;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -82,11 +87,11 @@ public class ReadActivity extends AppCompatActivity {
                             }
                             tmpArrayData.clear();
                         } else {
-                            Connector.getInstance().runOnMain(() -> Util.show(ReadActivity.this, "Gagal mengambil Data"));
+                            Util.show(ReadActivity.this, "Gagal mengambil Data");
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error. " + e.getMessage(), e.getCause());
-                        Connector.getInstance().runOnMain(() -> Util.show(ReadActivity.this, "Gagal mengambil Data"));
+                        Util.show(ReadActivity.this, "Gagal mengambil Data");
                     } finally {
                         var adapter = new RVAdapter(ReadActivity.this, arrayData);
                         Connector.getInstance().runOnMain(() -> bind.rvMain.setAdapter(adapter));
@@ -103,5 +108,32 @@ public class ReadActivity extends AppCompatActivity {
                 bind.rvMain.setAdapter(new RVAdapter(ReadActivity.this, arrayData));
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "requestCode " + requestCode + " resultCode " + resultCode);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                refresh();
+            } else if (resultCode == RESULT_CANCELED) {
+                Util.show(this, "Canceled");
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menuAdd){
+            startActivityForResult(new Intent(this, AddActivity.class),1);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
