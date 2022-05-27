@@ -1,6 +1,7 @@
 package ikhsan.maulana.tugas;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
         holder.nama.setText(data.get(1));
         holder.alamat.setText(data.get(2));
         holder.hobi.setText(data.get(3));
-        holder.cvMain.setOnClickListener(v -> Util.maintenance(context));
+        holder.cvMain.setOnClickListener(v -> {
+            var i = new Intent(context, UpdateActivity.class)
+                    .putExtra("nim",data.get(0))
+                    .putExtra("nama", data.get(1))
+                    .putExtra("alamat", data.get(2))
+                    .putExtra("hobi", data.get(3));
+            ((ReadActivity) context).startActivityForResult(i, 1);
+        });
         holder.cvMain.setOnLongClickListener(v -> {
             Util.maintenance(context);
             return false;
