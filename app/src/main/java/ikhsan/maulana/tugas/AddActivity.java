@@ -66,7 +66,7 @@ public class AddActivity extends AppCompatActivity {
                     .put("alamat", values[2])
                     .put("hobi", values[3]);
         } catch (JSONException t) {
-            Log.e(TAG, "Error happened.", t);
+            Log.e(TAG, "Error when serialize JSON.", t);
             progressDialog.dismiss();
             notifyError(dialog);
         }
@@ -79,7 +79,7 @@ public class AddActivity extends AppCompatActivity {
                     status[0] = jsonObject.getBoolean("status");
                     message[0] = Util.notNull(jsonObject.getString("msg"));
                 } catch (Exception e) {
-                    Log.e(TAG, "Error on JsonObjet", e);
+                    Log.e(TAG, "Error when deserialize JSON", e);
                 } finally {
                     dialog.setPositiveButton("Kembali", (d, w) -> {
                         if (status[0]) {
@@ -94,9 +94,15 @@ public class AddActivity extends AppCompatActivity {
 
             @Override
             public void onError(ANError anError) {
-                Log.e(TAG, "Error in AndroidNetworking", anError.getCause());
+                Log.e(TAG, "Error Happened.", anError.getCause());
                 progressDialog.dismiss();
-                notifyError(dialog);
+                try {
+                    var json = new JSONObject(anError.getErrorBody());
+                    message[0] = json.getString("msg");
+                } catch (Exception e) {
+                    Log.w(TAG, "Ignored, Error when deserialize JSON", e.getCause());
+                }
+                notifyError(dialog.setMessage(message[0]));
             }
         });
     }
