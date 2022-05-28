@@ -21,6 +21,7 @@ import ikhsan.maulana.tugas.databinding.ActivityUpdateBinding;
 
 public class UpdateActivity extends AppCompatActivity {
     public static final String TAG = UpdateActivity.class.getSimpleName();
+    private String oldNim = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class UpdateActivity extends AppCompatActivity {
         bind.submit.setOnClickListener(v -> {
             if (Util.validate(bind.txtNim, bind.txtName, bind.txtAddress, bind.txtHobby)) {
                 var progressDialog = new ProgressDialog(this);
-                progressDialog.setMessage("Menambahkan Data...");
+                progressDialog.setMessage("Mengubah Data...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
                 sendData(
@@ -55,7 +56,8 @@ public class UpdateActivity extends AppCompatActivity {
 
     private void getDataIntent(@NonNull EditText... texts) {
         var bundle = getIntent().getExtras();
-        texts[0].setText(getString(bundle, "nim"));
+        oldNim = getString(bundle, "nim");
+        texts[0].setText(oldNim);
         texts[1].setText(getString(bundle, "nama"));
         texts[2].setText(getString(bundle, "alamat"));
         texts[3].setText(getString(bundle, "hobi"));
@@ -87,7 +89,7 @@ public class UpdateActivity extends AppCompatActivity {
             notifyError(dialog);
         }
 
-        Connector.getInstance().apiUpdate(values[0], obj).getAsJSONObject(
+        Connector.getInstance().apiUpdate(oldNim, obj).getAsJSONObject(
                 new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
@@ -111,9 +113,15 @@ public class UpdateActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.e(TAG, "Error in AndroidNetworking", anError.getCause());
+                        Log.e(TAG, "Error Happened.", anError.getCause());
                         progressDialog.dismiss();
-                        notifyError(dialog);
+                        try {
+                            var json = new JSONObject(anError.getErrorBody());
+                            message[0] = json.getString("msg");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        notifyError(dialog.setMessage(message[0]));
                     }
                 });
     }
