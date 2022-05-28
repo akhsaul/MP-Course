@@ -85,44 +85,43 @@ public class UpdateActivity extends AppCompatActivity {
                     .put("alamat", values[2])
                     .put("hobi", values[3]);
         } catch (JSONException t) {
-            Log.e(TAG, "Error happened.", t);
+            Log.e(TAG, "Error when serialize JSON.", t);
             notifyError(dialog);
         }
 
-        Connector.getInstance().apiUpdate(oldNim, obj).getAsJSONObject(
-                new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        progressDialog.dismiss();
-                        try {
-                            status[0] = jsonObject.getBoolean("status");
-                            message[0] = Util.notNull(jsonObject.getString("msg"));
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error on JsonObjet", e);
-                        } finally {
-                            dialog.setPositiveButton("Kembali", (d, w) -> {
-                                if (status[0]) {
-                                    setResult(RESULT_OK);
-                                } else {
-                                    setResult(RESULT_CANCELED);
-                                }
-                                UpdateActivity.this.finish();
-                            }).setMessage(message[0]).show();
+        Connector.getInstance().apiUpdate(oldNim, obj).getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                progressDialog.dismiss();
+                try {
+                    status[0] = jsonObject.getBoolean("status");
+                    message[0] = Util.notNull(jsonObject.getString("msg"));
+                } catch (Exception e) {
+                    Log.e(TAG, "Error when deserialize JSON", e);
+                } finally {
+                    dialog.setPositiveButton("Kembali", (d, w) -> {
+                        if (status[0]) {
+                            setResult(RESULT_OK);
+                        } else {
+                            setResult(RESULT_CANCELED);
                         }
-                    }
+                        UpdateActivity.this.finish();
+                    }).setMessage(message[0]).show();
+                }
+            }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.e(TAG, "Error Happened.", anError.getCause());
-                        progressDialog.dismiss();
-                        try {
-                            var json = new JSONObject(anError.getErrorBody());
-                            message[0] = json.getString("msg");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        notifyError(dialog.setMessage(message[0]));
-                    }
-                });
+            @Override
+            public void onError(ANError anError) {
+                Log.e(TAG, "Error Happened.", anError.getCause());
+                progressDialog.dismiss();
+                try {
+                    var json = new JSONObject(anError.getErrorBody());
+                    message[0] = json.getString("msg");
+                } catch (Exception e) {
+                    Log.w(TAG, "Ignored, Error when deserialize JSON", e.getCause());
+                }
+                notifyError(dialog.setMessage(message[0]));
+            }
+        });
     }
 }
