@@ -1,7 +1,10 @@
 package ikhsan.maulana.tugas;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import ikhsan.maulana.tugas.core.Connector;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
     private final Context context;
@@ -47,8 +57,62 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
                     .putExtra("hobi", data.get(3));
             ((ReadActivity) context).startActivityForResult(i, 1);
         });
+
         holder.cvMain.setOnLongClickListener(v -> {
-            Util.maintenance(context);
+            final String[] message = {"Data gagal di hapus!"};
+            String nim = data.get(0);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                    .setMessage("Ingin menghapus Data dengan NIM " + nim + " ?")
+                    .setCancelable(false);
+
+            builder.setPositiveButton("Ya", (dialog, w) -> {
+                ProgressDialog progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("Menghapus...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                Connector.getInstance().apiDelete(nim).getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        try {
+                            boolean status = response.getBoolean("status");
+                            message[0] = response.getString("msg");
+                            if (status && context instanceof ReadActivity) {
+                                Util.show(context, message[0]);
+                                ((ReadActivity) context).refresh();
+                            } else {
+                                message[0] = "Context is not instance of " + ReadActivity.class;
+                                dialog.cancel();
+                                Util.show(context, message[0]);
+                            }
+                        } catch (Exception e) {
+                            Log.e("DELETE", "Error in onResponse.", e.getCause());
+                            dialog.cancel();
+                            Util.show(context, message[0]);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("DELETE", "Error in onError.", anError.getCause());
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject json = new JSONObject(anError.getErrorBody());
+                            message[0] = json.getString("msg");
+                        } catch (Exception e) {
+                            Log.w("DELETE", "Ignored, Error when deserialize JSON", e.getCause());
+                        }
+                        dialog.cancel();
+                        Util.show(context, message[0]);
+                    }
+                });
+            });
+            builder.setNegativeButton("Tidak", (dialog, w) -> {
+                dialog.cancel();
+                Util.show(context, "Canceled");
+            });
+            builder.show();
             return false;
         });
     }

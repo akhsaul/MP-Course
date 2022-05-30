@@ -101,6 +101,15 @@ public class Connector {
                 .build();
     }
 
+    @NonNull
+    public ANRequest apiDelete(@NonNull String nim) {
+        return AndroidNetworking.delete(BASE + "delete/" + nim)
+                .setPriority(Priority.HIGH)
+                .setUserAgent(AGENT)
+                .setTag("DELETE")
+                .build();
+    }
+
     public void run(Runnable r) {
         executor.execute(r);
     }
