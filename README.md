@@ -1,6 +1,6 @@
 # Mobile Programming Course
 
-Please send me [email](mailto:ikhsanmaulana384@gmail.com) if you want to try these project...
+Send me an [email](mailto:ikhsanmaulana384@gmail.com) if you want to try this project...
 
 The API will be offline forever unless you want to try it.
 
